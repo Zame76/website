@@ -1,0 +1,29 @@
+body {
+    background-color: black;
+    color:green;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+h1 {    
+    font-size: 2rem;
+}
+h2 {
+    font-size: 1.5rem;
+    font-style: italic;
+}
+p {
+    font-size: 1rem
+}
+.div_title {
+    border-color: green;
+    border-style: double;
+    border-width: 0.3em;
+    padding-left: 1em;
+    margin-top: 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+}
+.div_text {
+    padding-left: 2em;
+}
