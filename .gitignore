@@ -152,7 +152,7 @@ cython_debug/
 #.idea/
 
 # Sqlite3 databases
-db/test.db
+static/db/website.db
 
 # Configuration file
 config.py

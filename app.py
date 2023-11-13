@@ -12,6 +12,7 @@
 
 # Import needed libraries and functions
 from flask import Flask, render_template
+from weather_api import getWeatherData
 
 # Initialize app
 app = Flask(__name__)
@@ -20,7 +21,8 @@ app = Flask(__name__)
 @app.route('/')
 # Tell flask to render template page index.html
 def root():
-    return render_template("index.html")
+    weather = getWeatherData()
+    return render_template("index.html", weather = weather)
 
 # Set app to run with debug on
 if __name__ == "__main__":
