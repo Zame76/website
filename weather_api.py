@@ -93,7 +93,7 @@ def getWeatherData():
         # - Kohtalainen lumi/räntä
         # - Runsas lumi/räntä
 
-        # Create dictionary
+        # Create dictionary from api values
         return_value = {"MITTAUSAIKA":localsensortime,
                         sensors[0]['name']:sensors[0]['value'],
                         sensors[12]['name']:sensors[12]['value'],
@@ -126,7 +126,7 @@ def getWeatherData():
     # Return values from sql database
     else:
         print("sql")
-        # Create dictionary
+        # Create dictionary from sql values
         return_value = {"MITTAUSAIKA":weather[1],
                         "ILMA":weather[2],
                         "KESKITUULI":weather[3],
