@@ -7,7 +7,8 @@ def createTables():
     sql = conn.cursor()
     clause = "create table if not exists Weather ("                 
     clause += "WID integer primary key autoincrement, "     
-    clause += "Time datetime not null, "
+    clause += "LoggedTime datetime not null, "
+    clause += "MeasuredTime text, "
     clause += "Temperature real, "
     clause += "WindSpeed real, "
     clause += "WindDirection real, "
@@ -23,8 +24,8 @@ def insertWeather(parameters):
     conn = sqlite3.connect(path)
     sql = conn.cursor()
     clause = "insert into Weather "
-    clause += "(Time, Temperature, WindSpeed, WindDirection, Moisture, Rain, RainDescFi, RainDescEn) "
-    clause += "values (?, ?, ?, ?, ?, ?, ?, ?)"
+    clause += "(LoggedTime, MeasuredTime, Temperature, WindSpeed, WindDirection, Moisture, Rain, RainDescFi, RainDescEn) "
+    clause += "values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
     sql.execute(clause, parameters)
     conn.commit()
     conn.close()
@@ -32,7 +33,9 @@ def insertWeather(parameters):
 def getLatestWeather():
     conn = sqlite3.connect(path)
     sql = conn.cursor()
-    clause = "select Time, Temperature, WindSpeed, WindDirection, Moisture, Rain, RainDescFi, RainDescEn from Weather where Time = (select max(Time) from Weather)"
+    clause = "select LoggedTime, MeasuredTime, Temperature, WindSpeed, WindDirection, Moisture, Rain, RainDescFi, RainDescEn "
+    clause += "from Weather "
+    clause += "where LoggedTime = (select max(LoggedTime) from Weather)"
     value = sql.execute(clause).fetchone()
     conn.close
     return value

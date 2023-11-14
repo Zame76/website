@@ -1,6 +1,7 @@
 body {
     background-color: black;
     color:green;
+    font-size: 1rem;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
@@ -11,19 +12,29 @@ h2 {
     font-size: 1.5rem;
     font-style: italic;
 }
-p {
-    font-size: 1rem
-}
-.div_title {
+div {
     border-color: green;
-    border-style: double;
+    border-style: solid;
     border-width: 0.3em;
+    border-radius: 1em 1em 1em 1em;
     padding-left: 1em;
+    overflow: hidden;
+}
+.div_title {    
     margin-top: 0.5em;
     margin-left: 0.5em;
     margin-right: 0.5em;
     margin-bottom: 0.5em;
 }
+.div_box {
+    margin-top: 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;    
+    width: 20em;
+    height: 10em;
+    float: left;
+}
 .div_text {
-    padding-left: 2em;
+    border-style: hidden;
 }

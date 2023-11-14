@@ -13,16 +13,15 @@ def getWeatherData():
     sql.createTables()
     weather = sql.getLatestWeather()
 
-    # Convert time from sql database to datetime format
-    date_format = '%Y-%m-%d %H:%M:%S.%f'
-    sql_time = datetime.strptime(weather[0], date_format)
-
     # If database is empty
-    if len(weather) == 0:
+    if weather == None:
         # Get fresh data from api
         getapi = True
     # Otherwise check the time difference, if more than 5 minutes has passed since last api call    
     else: 
+         # Convert time from sql database to datetime format
+        date_format = '%Y-%m-%d %H:%M:%S.%f'
+        sql_time = datetime.strptime(weather[0], date_format)
         # Get the time difference in minutes
         timediff = (datetime.now() - sql_time).total_seconds() / 60        
         # If more than 5 minutes has passed, get fresh data from api
@@ -48,15 +47,30 @@ def getWeatherData():
         response = get(apiurl, headers=headers)
         sensors = response.json()['sensorValues']
 
+        # Turn ISO-formatted datetime string to UTC-datetime object
+        measuredtime = datetime.fromisoformat(sensors[0]['measuredTime'])
+        # Convert utc time to local time. From Python 3.6. and onwards, .astimezone returns localtimezone value if no tz-option is None
+        localtime = datetime.astimezone(measuredtime).strftime("%d.%m.%Y %H:%M:%S")
+
         # Create a tuple of parameters to be inserted to database
-        parameters = (datetime.now(), sensors[0]['value'], sensors[12]['value'], sensors[14]['value'], sensors[15]['value'], 
+        parameters = (datetime.now(), localtime, sensors[0]['value'], sensors[12]['value'], sensors[14]['value'], sensors[15]['value'], 
                     sensors[16]['value'], sensors[16]['sensorValueDescriptionFi'],  sensors[16]['sensorValueDescriptionEn'])
         
         # Insert values to database
         sql.insertWeather(parameters)
+        
+        # SensorValueDescriptionFi values
+        # - Pouta
+        # - Heikko
+        # - Kohtalainen
+        # - Runsas
+        # - Heikko lumi/räntä
+        # - Kohtalainen lumi/räntä
+        # - Runsas lumi/räntä
 
         # Create dictionary
-        return_value = {sensors[0]['name']:sensors[0]['value'],
+        return_value = {"MITTAUSAIKA":localtime,
+                        sensors[0]['name']:sensors[0]['value'],
                         sensors[12]['name']:sensors[12]['value'],
                         sensors[14]['name']:sensors[14]['value'],
                         sensors[15]['name']:sensors[15]['value'],
@@ -86,12 +100,13 @@ def getWeatherData():
     else:
         print("sql")
         # Create dictionary
-        return_value = {"ILMA":weather[1],
-                        "KESKITUULI":weather[2],
-                        "TUULENSUUNTA":weather[3],
-                        "ILMAN_KOSTEUS":weather[4],
-                        "SADE":weather[5],
-                        "SADE_KUVAUS":weather[6],
-                        "SADE_DESC":weather[7]}
+        return_value = {"MITTAUSAIKA":weather[1],
+                        "ILMA":weather[2],
+                        "KESKITUULI":weather[3],
+                        "TUULENSUUNTA":weather[4],
+                        "ILMAN_KOSTEUS":weather[5],
+                        "SADE":weather[6],
+                        "SADE_KUVAUS":weather[7],
+                        "SADE_DESC":weather[8]}
 
     return return_value

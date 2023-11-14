@@ -13,6 +13,7 @@
 # Import needed libraries and functions
 from flask import Flask, render_template
 from weather_api import getWeatherData
+import sqlite3
 
 # Initialize app
 app = Flask(__name__)
@@ -23,6 +24,16 @@ app = Flask(__name__)
 def root():
     weather = getWeatherData()
     return render_template("index.html", weather = weather)
+
+
+@app.route('/photo')
+def photo():
+    path = "static/db/website.db"
+    conn = sqlite3.connect(path)
+    sql = conn.cursor()
+    photo = sql.execute("select photo from Test where id = (select max(id) from Test)").fetchone()    
+    conn.close()
+    return render_template("photo.html", photo = photo)
 
 # Set app to run with debug on
 if __name__ == "__main__":
