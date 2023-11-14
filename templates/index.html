@@ -18,7 +18,7 @@
 {# Similarly in layout.html, there is block page body, in which we insert actual content of this page. #}
 
 {% block body %}
-    <div class="div_title">
+    <div>
         <h1>Hello Oulu!</h1>
     </div>
     {#
@@ -35,11 +35,15 @@
             <h2>Olosuhteet:</h2>
             <p>Lämpötila: {{ weather["ILMA"] }} C&deg;</p>
             <p>Kosteus: {{ weather["ILMAN_KOSTEUS"] }} %</p>
+            <p>Sade: {{ weather["SADE"] }}</p>
         </div>
         <div class="div_box">
             <h2>Tuuli:</h2>
             <p>Tuuli: {{ weather["KESKITUULI"] }} m/s</p>
             <p>Suunta: {{ weather["TUULENSUUNTA"] }} &deg;</p>
+        </div>
+        <div class="div_box div_photo">
+            <img src="{{ weather['KUVA'] }}" alt="A photo of motorway in Intiö" id="img_photo">
         </div>
         <div class="div_box">
             <h2>Säätiedot tarjoaa:</h2>
