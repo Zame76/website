@@ -13,8 +13,9 @@ def getWeatherData():
     # refreshed periodically in order to not get blocked by digitraffic. 
     sql.createTables()
     weather = sql.getLatestWeather()
-    photoinfo = sql.getLatestPhoto()
+    photoinfo = sql.getLatestPhoto()    
 
+    # Get the current datetime value
     current_time = datetime.now()
 
     # If database is empty
@@ -37,7 +38,9 @@ def getWeatherData():
 
     # Do the api call    
     if getapi == True:
+        # print this to terminal running the framework to see where the data came from
         print("api")
+        
         # Url for open source api call, provider digitraffic.fi, which maintains lots of weather stations along Finnish road network
         # This site is located alongside Highway no 4, Oulu (Intiö), Finland (https://tie.digitraffic.fi/api/weather/v1/stations/12019)
         # List of all weather stations: https://tie.digitraffic.fi/api/weather/v1/stations
@@ -84,6 +87,9 @@ def getWeatherData():
         # Insert values to Photo table
         sql.insertPhoto(parameters)
 
+        # Draw wind direction compass and save it as compass.jpg
+        photo.drawArrow(sensors[14]['value'])
+ 
         # SensorValueDescriptionFi values
         # - Pouta
         # - Heikko
@@ -125,6 +131,7 @@ def getWeatherData():
 
     # Return values from sql database
     else:
+        # print this to terminal running the framework to see where the data came from
         print("sql")
         # Create dictionary from sql values
         return_value = {"MITTAUSAIKA":weather[1],

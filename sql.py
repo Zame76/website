@@ -1,5 +1,6 @@
 import sqlite3
 
+# Set the path to database file
 path = "static/db/website.db"
 
 # Create tables to database if they don't exist already
@@ -26,7 +27,9 @@ def createTables():
     clause += "LoggedTIme datetime not null, "
     clause += "MeasuredTime text, "
     clause += "B64Photo text)"
-    sql.execute(clause)
+    sql.execute(clause)    
+
+    # Commit the changes to the database
     conn.commit()
     conn.close()
 
@@ -34,10 +37,16 @@ def createTables():
 def insertWeather(parameters):
     conn = sqlite3.connect(path)
     sql = conn.cursor()
+    # Clean up Weather table from old data, here we need to trim LoggedTime to Y-m-s format and delete everything that is not 
+    # from today.
+    clause = "delete from Weather where date(LoggedTime) < date()"
+    sql.execute(clause)
+    # Insert data from parameters into the Weather table
     clause = "insert into Weather "
     clause += "(LoggedTime, MeasuredTime, Temperature, WindSpeed, WindDirection, Moisture, Rain, RainDescFi, RainDescEn) "
     clause += "values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
     sql.execute(clause, parameters)
+    # Commit the changes to the database
     conn.commit()
     conn.close()
 
@@ -45,10 +54,16 @@ def insertWeather(parameters):
 def insertPhoto(parameters):
     conn = sqlite3.connect(path)
     sql = conn.cursor()
+    # Clean up Weather table from old data, here we need to trim LoggedTime to Y-m-s format and delete everything that is not 
+    # from today.
+    clause = "delete from Photo where date(LoggedTime) < date()"
+    sql.execute(clause)
+    # Insert data from parameters into the Photo table
     clause = "insert into Photo "
     clause += "(LoggedTime, MeasuredTime, B64Photo) "
     clause += "values (?, ? , ?)"
     sql.execute(clause, parameters)
+    # Commit the changes to the database
     conn.commit()
     conn.close()
 
@@ -56,9 +71,11 @@ def insertPhoto(parameters):
 def getLatestWeather():
     conn = sqlite3.connect(path)
     sql = conn.cursor()
+    # Get the latest data from the Weather table
     clause = "select LoggedTime, MeasuredTime, Temperature, WindSpeed, WindDirection, Moisture, Rain, RainDescFi, RainDescEn "
     clause += "from Weather "
     clause += "where LoggedTime = (select max(LoggedTime) from Weather)"
+    # Get the one result row that this select grabs from database and return it
     value = sql.execute(clause).fetchone()
     conn.close()
     return value
@@ -67,7 +84,9 @@ def getLatestWeather():
 def getLatestPhoto():
     conn = sqlite3.connect(path)
     sql = conn.cursor()
+    # Get the latest data from the Photo table
     clause = "select LoggedTime, MeasuredTime, B64Photo from Photo where LoggedTime = (select max(LoggedTime) from Photo)"
+    # Get the one result row that this select grabs from database and return it
     value = sql.execute(clause).fetchone()
     conn.close()
     return value
