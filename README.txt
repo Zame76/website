@@ -9,10 +9,22 @@ Needed packages are:
     - requests
     - pillow
 
-NOTE: You will need to create 
+NOTE: You will need to create this file to root directory of this project
     config.py 
-file to root directory and set variable digitraffic_user = "<insert username here>".
-Replace <insert username here> with your username.
+Variables in this file are:
+    digitraffic_user = "<insert username here>"         
+    show_electricityprices = True or False
+    entsoe_securitytoken = "<generated hash>"
+    database_path = "<folder outside of this project>"
+- Replace <insert username here> with your username in digitraffic_user. You can 
+  use anything you want here.
+- Also if you wish to get Electricity prices in Finland on the web page, you need 
+  to register yourself to entsoe site. Read more in electricity_api.py
+- If you do not want to show electricity prices or have not generated security token,
+  set show_electricityprices to False, otherwise set it True
+- If you have generated security token, insert it to entsoe_securitytoken variable
+- Create or select a folder outside of this project and copy the folder path to 
+  database_path variable. This app will create database file there when run first time.
 
 To run this website, use command
     py app.py
@@ -50,8 +62,6 @@ weather_api.py
 static/db/db-folder.txt
     - placeholder file, that forces creating db folder. Db folder will hold website.db
       file
-static/db/website.db
-    - this file will be created at first run, holds sqlite3 sql database
 static/images/
     - holds image-files used by website
 static/styles/default.css

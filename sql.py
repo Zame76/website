@@ -1,7 +1,8 @@
 import sqlite3
+import config
 
 # Set the path to database file
-path = "static/db/website.db"
+path = config.database_path + "website.db"
 
 # Create tables to database if they don't exist already
 def createTables():
