@@ -1,7 +1,7 @@
 # Import libraries
 from datetime import datetime
 from requests import get
-import sql
+from sql import createTables, getLatestPhoto, getLatestWeather, insertPhoto, insertWeather
 import photo
 import config
 
@@ -28,9 +28,9 @@ def getWeatherData():
 
     # Digitraffic.fi allows maximum of 60 apicalls per minute, so we are going to store the results into the database and only get
     # refreshed periodically in order to not get blocked by digitraffic. 
-    sql.createTables()
-    weather = sql.getLatestWeather()
-    photoinfo = sql.getLatestPhoto()    
+    createTables()
+    weather = getLatestWeather()
+    photoinfo = getLatestPhoto()    
 
     # Get the current datetime value
     current_time = datetime.now()
@@ -81,7 +81,7 @@ def getWeatherData():
                     sensors[16]['value'], sensors[16]['sensorValueDescriptionFi'],  sensors[16]['sensorValueDescriptionEn'])
         
         # Insert values to Weather table
-        sql.insertWeather(parameters)
+        insertWeather(parameters)
         
         # Get the photo metainfo
         url = "https://tie.digitraffic.fi/api/weathercam/v1/stations/C12612/data"
@@ -102,7 +102,7 @@ def getWeatherData():
         # Create tuple of parameters to be inserted to Photo table
         parameters = (current_time, localpresettime, b64photo)
         # Insert values to Photo table
-        sql.insertPhoto(parameters)
+        insertPhoto(parameters)
 
         # Draw wind direction compass and save it as compass.jpg
         photo.drawArrow(sensors[14]['value'])
